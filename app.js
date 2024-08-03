@@ -18,6 +18,10 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }))
 app.use(cookieParser())
 
+app.get("/", (req, res) => {
+	res.json({ msg: "OK" })
+})
+
 app.use("/", mainRoutes)
 app.use("/trip", tripRoutes)
 app.use("/users", userRoutes)
