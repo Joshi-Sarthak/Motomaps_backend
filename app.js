@@ -15,7 +15,13 @@ const app = express()
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }))
+app.use(
+	cors({
+		credentials: true,
+		origin: ["http://localhost:5173", "https://motomaps-frontend.vercel.app"],
+	}),
+)
+
 app.use(cookieParser())
 
 app.get("/", (req, res) => {
