@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(
 	cors({
 		credentials: true,
-		origin: ["http://localhost:5173", "https://motomaps-frontend.vercel.app"],
+		origin: ["http://localhost:5173", "https://motomaps.vercel.app"],
 	}),
 )
 
