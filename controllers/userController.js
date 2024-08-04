@@ -61,7 +61,6 @@ const updateUser = async (req, res, next) => {
 		const { password: hashedPassword, ...rest } = respo.rows[0]
 		res.status(200).json(rest)
 	} catch (error) {
-		console.log(error)
 		res.status(500).json({ msg: "Unexpected error occurred" })
 	}
 }
@@ -79,7 +78,6 @@ const deleteUser = async (req, res, next) => {
 		await db.query(text, values)
 		res.status(200).json("User has been deleted...")
 	} catch (error) {
-		console.log(error)
 		res.status(500).json({ msg: "Unexpected error occurred" })
 	}
 }

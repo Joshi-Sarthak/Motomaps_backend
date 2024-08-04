@@ -51,7 +51,6 @@ const signup = async (req, res) => {
 		}
 
 		const { rows } = await db.query(text, values)
-		console.log(rows[0])
 
 		const token = jwt.sign({ id: `${rows[0].user_id}` }, process.env.JWT_SECRET, {
 			expiresIn: "48h",
@@ -70,7 +69,6 @@ const signup = async (req, res) => {
 			.status(200)
 			.json(rest)
 	} catch (err) {
-		console.log(err)
 		res.status(500).json({ error: "Unexpected error occurred, signup failed" })
 	}
 }
@@ -109,7 +107,6 @@ const login = async (req, res) => {
 			.status(200)
 			.json(rest)
 	} catch (err) {
-		console.log(err)
 		res.status(500).json({ error: "Unexpected error occurred, login failed" })
 	}
 }
@@ -118,24 +115,20 @@ const verifyToken = (req, res, next) => {
 	try {
 		const cookies = req.headers.cookie
 
-		console.log(cookies, "\n")
 		const jwttoken = cookies
 			.split(";")
 			.find((cookie) => cookie.trim().startsWith("access_token="))
 		const token = jwttoken.split("=")[1]
 
-		console.log(token)
 		if (!token) {
 			return res.status(404).json({ message: "No token found" })
 		}
 		const user = jwt.verify(token, process.env.JWT_SECRET)
 
-		console.log(user)
 		req.id = user.id
 
 		next()
 	} catch (e) {
-		console.log(e)
 		res.status(500).json({ message: "Token verification failed" })
 	}
 }
@@ -198,7 +191,6 @@ const google = async (req, res) => {
 			]
 
 			const { rows } = await db.query(insertText, insertValues)
-			console.log("New user created:", rows[0])
 
 			const token = jwt.sign(
 				{ id: `${rows[0].user_id}` },
@@ -220,7 +212,6 @@ const google = async (req, res) => {
 				.json(rest)
 		}
 	} catch (err) {
-		console.log("Error in Google sign-in:", err)
 		res.status(500).json({ error: "Unexpected error occurred, google auth failed" })
 	}
 }
@@ -250,7 +241,6 @@ const sendOTP = async (req, res) => {
 		await sendMail(req.body.email, oneTimePass)
 		res.status(200).json({ msg: "OTP sent" })
 	} catch (e) {
-		console.log(e)
 		res.status(500).json({ error: "Unexpected error occurred" })
 	}
 }
@@ -285,7 +275,6 @@ const verifyOTP = async (req, res) => {
 
 		res.status(200).json({ msg: "OTP Verified" })
 	} catch (e) {
-		console.log(e)
 		res.status(500).json({ error: "Unexpected error occurred" })
 	}
 }

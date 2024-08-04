@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from "uuid"
 
 const saveTrip = async (req, res, next) => {
 	const postID = uuidv4()
-	console.log(req.body)
 
 	const now = new Date()
 	const offset = 5.5 * 60 * 60 * 1000 // 5 hours 30 minutes in milliseconds
@@ -28,7 +27,7 @@ const saveTrip = async (req, res, next) => {
 
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json({ msg: "Success" })
 	} catch (err) {
 		next(err)
@@ -58,7 +57,7 @@ const updateTrip = async (req, res, next) => {
 
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json({ msg: "Success" })
 	} catch (err) {
 		next(err)
@@ -73,7 +72,7 @@ const deleteTrip = async (req, res, next) => {
 
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json({ msg: "Success" })
 	} catch (err) {
 		next(err)
@@ -87,7 +86,7 @@ const loadTrip = async (req, res, next) => {
 
 	try {
 		const { rows } = await db.query(text, values)
-		//console.log(rows[0])
+
 		res.status(200).json(rows[0])
 	} catch (err) {
 		next(err)
@@ -99,7 +98,7 @@ const loadAllTrips = async (req, res, next) => {
 	const values = []
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json(rows)
 	} catch (err) {
 		next(err)
@@ -111,7 +110,7 @@ const loadAllTripsMostLiked = async (req, res, next) => {
 	const values = []
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json(rows)
 	} catch (err) {
 		next(err)
@@ -123,7 +122,7 @@ const loadAllTripsMostLikedLimited = async (req, res, next) => {
 	const values = []
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json(rows)
 	} catch (err) {
 		next(err)
@@ -135,7 +134,7 @@ const loadAllTripsNewest = async (req, res, next) => {
 	const values = []
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json(rows)
 	} catch (err) {
 		next(err)
@@ -148,7 +147,7 @@ const loadAllMyTrips = async (req, res, next) => {
 	const values = [id]
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json(rows)
 	} catch (err) {
 		next(err)
@@ -162,7 +161,7 @@ const loadAllMyLikedTrips = async (req, res, next) => {
 	const values = [id]
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json(rows)
 	} catch (err) {
 		next(err)
@@ -174,7 +173,7 @@ const loadAllTripsOldest = async (req, res, next) => {
 	const values = []
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json(rows)
 	} catch (err) {
 		next(err)
@@ -187,7 +186,7 @@ const loadMyPosts = async (req, res, next) => {
 	const values = [id]
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json(rows)
 	} catch (err) {
 		next(err)
@@ -201,7 +200,7 @@ const loadMyLikedPosts = async (req, res, next) => {
 	const values = [id]
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
+
 		res.status(200).json(rows)
 	} catch (err) {
 		next(err)
@@ -222,8 +221,7 @@ const postLike = async (req, res, next) => {
 		if (rows) {
 			const { rows: rows2 } = await db.query(text2, values2)
 		}
-		//console.log(rows)
-		//console.log("lol", rows2)
+
 		res.status(200).json(rows)
 	} catch (err) {
 		next(err)
@@ -238,15 +236,13 @@ const postUnlike = async (req, res, next) => {
 
 	const text2 = "UPDATE post SET likes = likes - 1 WHERE post_id = $1 RETURNING *;"
 	const values2 = [post_id]
-	//console.log(user_id, post_id)
 
 	try {
 		const { rows } = await db.query(text, values)
 		if (rows) {
 			const { rows: rows2 } = await db.query(text2, values2)
 		}
-		//console.log(rows)
-		//console.log("lol", rows2)
+
 		res.status(200).json(rows)
 	} catch (err) {
 		next(err)
@@ -257,10 +253,10 @@ const isLiked = async (req, res, next) => {
 	const { user_id, post_id } = req.query
 	const text = "SELECT * FROM post_like WHERE user_id = $1 AND post_id = $2"
 	const values = [user_id, post_id]
-	//console.log(values)
+
 	try {
 		const { rows } = await db.query(text, values)
-		//console.log(rows)
+
 		if (rows.length > 0) {
 			res.status(200).json({ liked: true })
 		} else {
@@ -277,7 +273,6 @@ const userDetails = async (req, res, next) => {
 	const values = [user_id]
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
 
 		res.status(200).json(rows)
 	} catch (err) {
@@ -303,7 +298,6 @@ const search = async (req, res, next) => {
 	const values = [`%${query}%`]
 	try {
 		const { rows } = await db.query(text, values)
-		console.log(rows)
 
 		res.status(200).json(rows)
 	} catch (err) {
