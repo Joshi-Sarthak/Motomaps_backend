@@ -7,11 +7,17 @@ import { userRoutes } from "./routes/userRoutes.js"
 import { authRoutes } from "./routes/authRoutes.js"
 import { mainRoutes } from "./routes/mainRoutes.js"
 import { tripRoutes } from "./routes/tripRoutes.js"
-import { deleteExpiredOTPs, verifyToken } from "./controllers/authController.js"
+import { deleteExpiredOTPs } from "./controllers/authController.js"
 import cron from "node-cron"
+
 dotenv.config()
 
 const app = express()
+
+app.use((req, res, next) => {
+	res.setHeader("Cross-Origin-Opener-Policy", "same-origin")
+	next()
+})
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -44,5 +50,5 @@ cron.schedule("*/10 * * * *", async () => {
 })
 
 app.listen(process.env.PORT, () => {
-	console.log(`listening on port ${process.env.PORT}`)
+	console.log(`Listening on port ${process.env.PORT}`)
 })
