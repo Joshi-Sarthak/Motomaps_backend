@@ -156,11 +156,12 @@ const google = async (req, res) => {
 			const { password: hashedPassword, ...rest } = rows[0]
 
 			return res
-				.cookie(String("access_token"), token, {
+				.cookie("access_token", token, {
 					path: "/",
 					expires: new Date(Date.now() + 1000 * 60 * 60 * 48),
 					httpOnly: true,
-					sameSite: "lax",
+					sameSite: "none", // 'lax' might not work cross-site
+					secure: process.env.NODE_ENV === "production", // Ensure this is true in production
 				})
 				.status(200)
 				.json(rest)
@@ -169,12 +170,11 @@ const google = async (req, res) => {
 				Math.random().toString(36).slice(-8) +
 				Math.random().toString(36).slice(-8)
 
-			const hashedPassword = bycryptjs.hashSync(generatedPassword, 10)
+			const hashedPassword = bcryptjs.hashSync(generatedPassword, 10)
 			const { name, profile_pic } = req.body
-			if (!profile_pic) {
-				profile_pic =
-					"https://firebasestorage.googleapis.com/v0/b/motomaps-auth.appspot.com/o/default.jpg?alt=media&token=823dd708-5fba-4062-8d19-249059c1b7c9"
-			}
+			const profilePicUrl =
+				profile_pic ||
+				"https://firebasestorage.googleapis.com/v0/b/motomaps-auth.appspot.com/o/default.jpg?alt=media&token=823dd708-5fba-4062-8d19-249059c1b7c9"
 			const [firstName, lastName] = name.split(" ")
 			const username =
 				firstName + lastName + Math.floor(Math.random() * 100000).toString()
@@ -182,21 +182,21 @@ const google = async (req, res) => {
 			const currentDate = new Date()
 			const formattedDate = currentDate.toISOString().split("T")[0]
 
-			const text =
+			const insertText =
 				"INSERT INTO users(user_id,username,email,password,first_name,last_name,profile_pic,last_login) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *"
-			const values = [
+			const insertValues = [
 				userId,
 				username,
 				email,
 				hashedPassword,
 				firstName,
 				lastName,
-				profile_pic,
+				profilePicUrl,
 				formattedDate,
 			]
 
-			const { rows } = await db.query(text, values)
-			console.log(rows[0])
+			const { rows } = await db.query(insertText, insertValues)
+			console.log("New user created:", rows[0])
 
 			const token = jwt.sign(
 				{ id: `${rows[0].user_id}` },
@@ -207,17 +207,18 @@ const google = async (req, res) => {
 			)
 
 			const { password: hashedPassword2, ...rest } = rows[0]
-			res.cookie(String("access_token"), token, {
+			res.cookie("access_token", token, {
 				path: "/",
-				expires: new Date(Date.now() + 1000 * 60 * 60 * 48), // 30 seconds
+				expires: new Date(Date.now() + 1000 * 60 * 60 * 48),
 				httpOnly: true,
-				sameSite: "lax",
+				sameSite: "none",
+				secure: process.env.NODE_ENV === "production",
 			})
 				.status(200)
 				.json(rest)
 		}
 	} catch (err) {
-		console.log(err)
+		console.log("Error in Google sign-in:", err)
 		res.status(500).json({ error: "Unexpected error occurred, google auth failed" })
 	}
 }
