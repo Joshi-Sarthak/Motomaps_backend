@@ -1,6 +1,6 @@
 import * as db from "../db/index.js"
 import { v4 as uuidv4 } from "uuid"
-import bycryptjs from "bcryptjs"
+import bcryptjs from "bcryptjs"
 import validator from "validator"
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
@@ -20,7 +20,7 @@ const signup = async (req, res) => {
 		if (!validator.isStrongPassword(password)) {
 			return res.status(401).json({ error: "Please choose a stronger password" })
 		}
-		const hashedPass = bycryptjs.hashSync(password, 10)
+		const hashedPass = bcryptjs.hashSync(password, 10)
 
 		const currentDate = new Date()
 		const formattedDate = currentDate.toISOString().split("T")[0]
@@ -87,7 +87,7 @@ const login = async (req, res) => {
 		if (!rows[0]) {
 			return res.status(404).json({ error: "User not found" })
 		}
-		const validPassword = bycryptjs.compareSync(password, rows[0].password)
+		const validPassword = bcryptjs.compareSync(password, rows[0].password)
 		if (!validPassword) {
 			return res.status(401).json({ error: "Invalid credentials" })
 		}
