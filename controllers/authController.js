@@ -60,11 +60,12 @@ const signup = async (req, res) => {
 		const { password: hashedPassword, ...rest } = rows[0]
 
 		return res
-			.cookie(String("access_token"), token, {
+			.cookie("access_token", token, {
 				path: "/",
-				expires: new Date(Date.now() + 1000 * 60 * 60 * 48), // 30 seconds
+				expires: new Date(Date.now() + 1000 * 60 * 60 * 48),
 				httpOnly: true,
-				sameSite: "lax",
+				sameSite: "none",
+				secure: true,
 			})
 			.status(200)
 			.json(rest)
@@ -98,11 +99,12 @@ const login = async (req, res) => {
 		const { password: hashedPassword, ...rest } = rows[0]
 
 		return res
-			.cookie(String("access_token"), token, {
+			.cookie("access_token", token, {
 				path: "/",
-				expires: new Date(Date.now() + 1000 * 60 * 60 * 48), // 30 seconds
+				expires: new Date(Date.now() + 1000 * 60 * 60 * 48),
 				httpOnly: true,
-				sameSite: "lax",
+				sameSite: "none",
+				secure: true,
 			})
 			.status(200)
 			.json(rest)
@@ -160,8 +162,8 @@ const google = async (req, res) => {
 					path: "/",
 					expires: new Date(Date.now() + 1000 * 60 * 60 * 48),
 					httpOnly: true,
-					sameSite: "none", // 'lax' might not work cross-site
-					secure: process.env.NODE_ENV === "production", // Ensure this is true in production
+					sameSite: "none",
+					secure: true,
 				})
 				.status(200)
 				.json(rest)
@@ -212,7 +214,7 @@ const google = async (req, res) => {
 				expires: new Date(Date.now() + 1000 * 60 * 60 * 48),
 				httpOnly: true,
 				sameSite: "none",
-				secure: process.env.NODE_ENV === "production",
+				secure: true,
 			})
 				.status(200)
 				.json(rest)
