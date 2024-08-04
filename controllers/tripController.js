@@ -5,11 +5,7 @@ const saveTrip = async (req, res, next) => {
 	const postID = uuidv4()
 
 	const now = new Date()
-	const offset = 5.5 * 60 * 60 * 1000 // 5 hours 30 minutes in milliseconds
-	const gmtPlus530Time = new Date(now.getTime() + offset)
-	const timestamp = gmtPlus530Time
-	const date = new Date(timestamp)
-	const isoDate = date.toISOString()
+	const isoDate = now.toISOString()
 
 	const text =
 		"INSERT INTO post (user_id,post_id,title,description,location,distance,images,likes,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *"
