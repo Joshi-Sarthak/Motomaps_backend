@@ -32,11 +32,7 @@ const saveTrip = async (req, res, next) => {
 
 const updateTrip = async (req, res, next) => {
 	const now = new Date()
-	const offset = 5.5 * 60 * 60 * 1000
-	const gmtPlus530Time = new Date(now.getTime() + offset)
-	const timestamp = gmtPlus530Time
-	const date = new Date(timestamp)
-	const isoDate = date.toISOString()
+	const isoDate = now.toISOString()
 
 	const text =
 		"UPDATE post set title=$1,description=$2,location=$3,distance=$4,images=$5,likes=$6,created_at=$7 WHERE post_id=$8 RETURNING *"
