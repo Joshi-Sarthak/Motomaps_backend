@@ -169,7 +169,7 @@ const google = async (req, res) => {
 			const { name, profile_pic } = req.body
 			const profilePicUrl =
 				profile_pic ||
-				"https://firebasestorage.googleapis.com/v0/b/motomaps-auth.appspot.com/o/default.jpg?alt=media&token=823dd708-5fba-4062-8d19-249059c1b7c9"
+				"https://firebasestorage.googleapis.com/v0/b/motomaps-auth.appspot.com/o/default.jpg?alt=media&token=7179c69c-498a-4020-8408-324b95dd9a79"
 			const [firstName, lastName] = name.split(" ")
 			const username =
 				firstName + lastName + Math.floor(Math.random() * 100000).toString()
