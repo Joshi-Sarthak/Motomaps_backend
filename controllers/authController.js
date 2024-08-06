@@ -34,7 +34,7 @@ const signup = async (req, res) => {
 			hashedPass,
 			firstname,
 			lastname,
-			"https://firebasestorage.googleapis.com/v0/b/motomaps-auth.appspot.com/o/default.jpg?alt=media&token=823dd708-5fba-4062-8d19-249059c1b7c9",
+			"https://firebasestorage.googleapis.com/v0/b/motomaps-auth.appspot.com/o/default.jpg?alt=media&token=7179c69c-498a-4020-8408-324b95dd9a79",
 			formattedDate,
 		]
 
